@@ -19,6 +19,8 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 public class LoginActivity extends AppCompatActivity {
 
     private static final String TAG = "MainActivity";
@@ -27,7 +29,6 @@ public class LoginActivity extends AppCompatActivity {
     Button signIn, signUp;
     TextView forgotPassword;
     private FirebaseAuth auth;
-
 
 
     @SuppressLint("MissingInflatedId")
@@ -43,6 +44,7 @@ public class LoginActivity extends AppCompatActivity {
         signUp = findViewById(R.id.button_signup_main);
         forgotPassword = findViewById(R.id.textView_forgotpwd_main);
 
+
         signIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -50,9 +52,9 @@ public class LoginActivity extends AppCompatActivity {
 
                 String userEmail = email.getText().toString();
                 String userPassword = password.getText().toString();
-                if(!userEmail.equals("") && !userPassword.equals("")) {
+                if (!userEmail.equals("") && !userPassword.equals("")) {
                     signIn(userEmail, userPassword);
-                }else{
+                } else {
                     Toast.makeText(LoginActivity.this, "Please enter an email and password", Toast.LENGTH_SHORT).show();
                 }
             }
