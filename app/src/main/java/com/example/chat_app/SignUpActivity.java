@@ -14,12 +14,19 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
+
+import java.util.UUID;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -32,6 +39,11 @@ public class SignUpActivity extends AppCompatActivity {
     FirebaseAuth auth;
     FirebaseDatabase database;
     DatabaseReference reference;
+
+    FirebaseStorage firebaseStorage;
+    StorageReference storageReference;
+
+    Uri imageUri;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -48,6 +60,8 @@ public class SignUpActivity extends AppCompatActivity {
         auth = FirebaseAuth.getInstance();
         database = FirebaseDatabase.getInstance();
         reference = database.getReference();
+        firebaseStorage = FirebaseStorage.getInstance();
+        storageReference = firebaseStorage.getReference();
 
         imageViewCircle.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -73,12 +87,50 @@ public class SignUpActivity extends AppCompatActivity {
     }
 
     private void signUp(String email, String password, String username) {
+
         auth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if(task.isSuccessful()){
                         reference.child("Users").child(auth.getUid()).child("userName").setValue(userName);
+                        if(imageControl){
+                                    UUID randomID = UUID.randomUUID();
+                                    String imageName = "image/"+randomID+".jpg";
+                                    storageReference.child(imageName).putFile(imageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                                        @Override
+                                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                                            StorageReference myStorageRef = firebaseStorage.getReference(imageName);
+                                            myStorageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                                @Override
+                                                public void onSuccess(Uri uri) {
+                                                    String filePath = uri.toString();
+                                                    reference.child("Users").child(auth.getUid()).child("image").setValue(filePath)
+                                                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                                @Override
+                                                                public void onSuccess(Void unused) {
+                                                                    Toast.makeText(SignUpActivity.this, "Write to database is successful.", Toast.LENGTH_SHORT).show();
+                                                                }
+                                                            }).addOnFailureListener(new OnFailureListener() {
+                                                                @Override
+                                                                public void onFailure(@NonNull Exception e) {
+
+                                                                }
+                                                            });
+                                                }
+                                            });
+                                        }
+                                    });
+                        }else{
+                            reference.child("Users").child(auth.getUid()).child("image").setValue("null");
+                        }
+
+                        Intent intent = new Intent(SignUpActivity.this, MainActivity.class);
+                        intent.putExtra("userName", username);
+                        startActivity(intent);
+                        finish();
+                }else{
+                    Toast.makeText(SignUpActivity.this, "There is a problem.", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -97,7 +149,7 @@ public class SignUpActivity extends AppCompatActivity {
 
         if(requestCode == 1 && resultCode == RESULT_OK && data != null){
 
-            Uri imageUri = data.getData();
+            imageUri = data.getData();
             Picasso.get().load(imageUri).into(imageViewCircle);
             imageControl = true;
         }else{
