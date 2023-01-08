@@ -35,11 +35,12 @@ public class SignUpActivity extends AppCompatActivity {
     CircleImageView imageViewCircle;
     EditText email, password, userName;
     Button signUp;
+
     boolean imageControl = false;
+
     FirebaseAuth auth;
     FirebaseDatabase database;
     DatabaseReference reference;
-
     FirebaseStorage firebaseStorage;
     StorageReference storageReference;
 
@@ -90,31 +91,46 @@ public class SignUpActivity extends AppCompatActivity {
 
         auth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+
+
+
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if(task.isSuccessful()){
+
                         reference.child("Users").child(auth.getUid()).child("userName").setValue(userName);
+
                         if(imageControl){
                                     UUID randomID = UUID.randomUUID();
                                     String imageName = "image/"+randomID+".jpg";
                                     storageReference.child(imageName).putFile(imageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+
                                         @Override
                                         public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+
                                             StorageReference myStorageRef = firebaseStorage.getReference(imageName);
+
                                             myStorageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+
                                                 @Override
                                                 public void onSuccess(Uri uri) {
+
                                                     String filePath = uri.toString();
+
                                                     reference.child("Users").child(auth.getUid()).child("image").setValue(filePath)
                                                             .addOnSuccessListener(new OnSuccessListener<Void>() {
+
                                                                 @Override
                                                                 public void onSuccess(Void unused) {
+
                                                                     Toast.makeText(SignUpActivity.this, "Write to database is successful.", Toast.LENGTH_SHORT).show();
                                                                 }
                                                             }).addOnFailureListener(new OnFailureListener() {
+
                                                                 @Override
                                                                 public void onFailure(@NonNull Exception e) {
 
+                                                                    Toast.makeText(SignUpActivity.this, "Write to database is not successful.", Toast.LENGTH_SHORT).show();
                                                                 }
                                                             });
                                                 }

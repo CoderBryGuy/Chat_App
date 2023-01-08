@@ -29,6 +29,10 @@ public class LoginActivity extends AppCompatActivity {
     Button signIn, signUp;
     TextView forgotPassword;
     private FirebaseAuth auth;
+    FirebaseUser firebaseUser;
+
+
+
 
 
     @SuppressLint("MissingInflatedId")
@@ -106,11 +110,11 @@ public class LoginActivity extends AppCompatActivity {
     public void onStart() {
         super.onStart();
 
-        FirebaseUser user = auth.getCurrentUser();
-        if (user != null) {
+        firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        if (firebaseUser!= null) {
             Intent i = new Intent(LoginActivity.this, MainActivity.class);
             startActivity(i);
-            finish();
+//            finish();
         }
     }
 }
