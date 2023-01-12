@@ -55,7 +55,7 @@ public class SignUpActivity extends AppCompatActivity {
         imageViewCircle = findViewById(R.id.imageViewCircle_signUp);
         email = findViewById(R.id.editText_email_signUp);
         password = findViewById(R.id.editText_password_signUp);
-        userName = findViewById(R.id.editText_username_signUp);
+        userName = findViewById(R.id.editText_username_profile);
         signUp = findViewById(R.id.button_signUp);
 
         auth = FirebaseAuth.getInstance();
@@ -142,7 +142,6 @@ public class SignUpActivity extends AppCompatActivity {
                         }
 
                         Intent intent = new Intent(SignUpActivity.this, MainActivity.class);
-                        intent.putExtra("userName", username);
                         startActivity(intent);
                         finish();
                 }else{

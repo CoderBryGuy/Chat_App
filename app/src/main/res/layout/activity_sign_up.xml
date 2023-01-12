@@ -52,7 +52,7 @@
         app:layout_constraintTop_toBottomOf="@+id/editText_email_signUp" />
 
     <EditText
-        android:id="@+id/editText_username_signUp"
+        android:id="@+id/editText_username_profile"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginLeft="15dp"
@@ -77,6 +77,6 @@
         android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editText_username_signUp" />
+        app:layout_constraintTop_toBottomOf="@+id/editText_username_profile" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

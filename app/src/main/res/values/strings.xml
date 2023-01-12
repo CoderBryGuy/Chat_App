@@ -9,4 +9,8 @@
     <string name="reset">RESET</string>
     <string name="profile">Profile</string>
     <string name="sign_out">Sign Out</string>
+    <string name="tap_photo_update_profile">Tap photo to update profile</string>
+    <string name="update_profile">Update Profile</string>
+    <string name="type_a_message">Type a message...</string>
+    <string name="press_to_send">Press to send</string>
 </resources>
