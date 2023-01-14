@@ -41,6 +41,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
 
     @Override
     public void onBindViewHolder(@NonNull MessageViewHolder holder, int position) {
+        holder.textView.setText(list.get(position).getMessage());
 
     }
 
@@ -55,6 +56,12 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
 
         public MessageViewHolder(@NonNull View itemView) {
             super(itemView);
+
+            if(status){
+                textView = itemView.findViewById(R.id.textView_cardsend);
+            }else{
+                textView = itemView.findViewById(R.id.textView_cardreceive);
+            }
         }
     }
 

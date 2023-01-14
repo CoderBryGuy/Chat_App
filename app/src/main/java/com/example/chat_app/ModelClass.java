@@ -2,22 +2,22 @@ package com.example.chat_app;
 
 public class ModelClass {
 
-    String messages;
+    String message;
     String from;
 
     public ModelClass() {}
 
     public ModelClass(String messages, String from) {
-        this.messages = messages;
+        this.message = messages;
         this.from = from;
     }
 
-    public String getMessages() {
-        return messages;
+    public String getMessage() {
+        return message;
     }
 
-    public void setMessages(String messages) {
-        this.messages = messages;
+    public void setMessage(String message) {
+        this.message = message;
     }
 
     public String getFrom() {
